@@ -44,6 +44,16 @@ type TestCar struct {
 	SpeedIncrement int
 }
 
+func (t *TestCar) IsTrue() bool {
+	log.Println("isTrue expression")
+	return true
+}
+
+func (t *TestCar) IsFalse() bool {
+	log.Println("isFalse expression")
+	return false
+}
+
 type DistanceRecorder struct {
 	TotalDistance int
 	TestTime      time.Time
@@ -51,37 +61,11 @@ type DistanceRecorder struct {
 
 const (
 	rules = `
-rule SpeedUp "When testcar is speeding up we keep increase the speed." salience 10 {
-    when
-        TestCar.SpeedUp == true && TestCar.Speed < TestCar.MaxSpeed
-    then
-        TestCar.Speed = TestCar.Speed + TestCar.SpeedIncrement;
-		DistanceRecord.TotalDistance = DistanceRecord.TotalDistance + TestCar.Speed;
-}
-
-rule StartSpeedDown "When testcar is speeding up and over max speed we change to speed down." salience 10  {
-    when
-        TestCar.SpeedUp == true && TestCar.Speed >= TestCar.MaxSpeed
-    then
-        TestCar.SpeedUp = false;
-		Log("Now we slow down");
-}
-
-rule SlowDown "When testcar is slowing down we keep decreasing the speed." salience 10  {
-    when
-        TestCar.SpeedUp == false && TestCar.Speed > 0
-    then
-        TestCar.Speed = TestCar.Speed - TestCar.SpeedIncrement;
-		DistanceRecord.TotalDistance = DistanceRecord.TotalDistance + TestCar.Speed;
-}
-
 rule SetTime "When Distance Recorder time not set, set it." {
 	when
-		IsZero(DistanceRecord.TestTime)
+		TestCar.IsFalse() && TestCar.IsTrue()
 	then
 		Log("Set the test time");
-		DistanceRecord.TestTime = Now();
-		Log(TimeFormat(DistanceRecord.TestTime,"Mon Jan _2 15:04:05 2006"));
 }
 `
 )

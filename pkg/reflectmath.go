@@ -779,3 +779,11 @@ func EvaluateLogicOr(left, right reflect.Value) (reflect.Value, error) {
 	}
 	return reflect.ValueOf(nil), fmt.Errorf("can not use data type of %s in Logical OR comparison", left.Kind().String())
 }
+
+func EvaluateLogicShort(left reflect.Value) (reflect.Value, error) {
+	if left.Kind() == reflect.Bool{
+		lv := left.Bool()
+		return reflect.ValueOf(lv), nil
+	}
+	return reflect.ValueOf(nil), fmt.Errorf("can not use data type of %s in Logical AND comparison", left.Kind().String())
+}
